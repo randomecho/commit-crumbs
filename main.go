@@ -62,6 +62,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	log.Println(*repo.FullName)
+
 	for _, commit := range commits {
 		log.Println(*commit.SHA)
 		log.Println(*commit.Commit.Author.Name)
