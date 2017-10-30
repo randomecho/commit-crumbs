@@ -4,12 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/google/go-github/github"
+	"golang.org/x/oauth2"
 	"log"
 	"os"
 )
 
 type Config struct {
-	Username string `json:username`
+	Username    string `json:"username"`
+	AccessToken string `json:"access_token"`
 }
 
 func getConfig(file string) Config {
@@ -30,9 +32,14 @@ func getConfig(file string) Config {
 
 func main() {
 	config := getConfig("./config.json")
-	ctx := context.Background()
-	client := github.NewClient(nil)
 	username := config.Username
+
+	ctx := context.Background()
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: config.AccessToken},
+	)
+	tc := oauth2.NewClient(ctx, ts)
+	client := github.NewClient(tc)
 
 	opt := &github.RepositoryListOptions{Type: "public"}
 	repos, _, err := client.Repositories.List(ctx, username, opt)
