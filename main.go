@@ -19,6 +19,17 @@ func main() {
 	}
 
 	for _, repo := range repos {
-		log.Println(*repo.Name)
+		opt := &github.CommitsListOptions{}
+		commits, _, err := client.Repositories.ListCommits(ctx, username, *repo.Name, opt)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		for _, commit := range commits {
+			log.Println(*commit.SHA)
+			log.Println(*commit.Commit.Author.Name)
+			log.Println(*commit.Commit.Message)
+		}
 	}
 }
