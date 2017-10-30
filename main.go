@@ -6,7 +6,9 @@ import (
 	"github.com/google/go-github/github"
 	"golang.org/x/oauth2"
 	"log"
+	"math/rand"
 	"os"
+	"time"
 )
 
 type Config struct {
@@ -48,18 +50,21 @@ func main() {
 		log.Fatal(err)
 	}
 
-	for _, repo := range repos {
-		opt := &github.CommitsListOptions{}
-		commits, _, err := client.Repositories.ListCommits(ctx, username, *repo.Name, opt)
+	s := rand.NewSource(time.Now().Unix())
+	r := rand.New(s)
+	n := r.Intn(len(repos))
+	repo := repos[n]
 
-		if err != nil {
-			log.Fatal(err)
-		}
+	optRepo := &github.CommitsListOptions{}
+	commits, _, err := client.Repositories.ListCommits(ctx, username, *repo.Name, optRepo)
 
-		for _, commit := range commits {
-			log.Println(*commit.SHA)
-			log.Println(*commit.Commit.Author.Name)
-			log.Println(*commit.Commit.Message)
-		}
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, commit := range commits {
+		log.Println(*commit.SHA)
+		log.Println(*commit.Commit.Author.Name)
+		log.Println(*commit.Commit.Message)
 	}
 }
