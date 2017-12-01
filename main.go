@@ -64,13 +64,17 @@ func main() {
 
 	log.Println(*repo.FullName)
 
-	m := make(map[string]string)
+	m := make(map[string]map[string]string)
 
 	for _, commit := range commits {
-		m[*commit.Commit.Author.Name] = *commit.Commit.Author.Email
+		if m[*commit.Commit.Author.Name] == nil {
+			m[*commit.Commit.Author.Name] = map[string]string{}
+		}
+
+		m[*commit.Commit.Author.Name][*commit.SHA] = *commit.Commit.Message
 	}
 
-	for author, email := range m {
-		log.Println(author, email)
+	for author, _ := range m {
+		log.Println(author, "\n-", len(m[author]), "commits")
 	}
 }
