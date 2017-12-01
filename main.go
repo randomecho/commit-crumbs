@@ -75,6 +75,18 @@ func main() {
 	}
 
 	for author, _ := range m {
-		log.Println(author, "\n-", len(m[author]), "commits")
+		var commitLength int
+
+		for commit, _ := range m[author] {
+			commitLength += len(m[author][commit])
+		}
+
+		commitAverage := commitLength / len(m[author])
+
+		log.Println(author,
+			"\n-", len(m[author]), "commits",
+			"\n-", commitLength, "Total commit chars",
+			"\n-", commitAverage, "Average commit chars",
+		)
 	}
 }
