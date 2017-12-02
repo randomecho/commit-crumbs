@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/google/go-github/github"
 	"golang.org/x/oauth2"
 	"log"
@@ -62,7 +63,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	log.Println(*repo.FullName)
+	fmt.Println(*repo.FullName, "\n")
 
 	m := make(map[string]map[string]string)
 
@@ -83,10 +84,10 @@ func main() {
 
 		commitAverage := commitLength / len(m[author])
 
-		log.Println(author,
-			"\n-", len(m[author]), "commits",
-			"\n-", commitLength, "Total commit chars",
-			"\n-", commitAverage, "Average commit chars",
-		)
+		fmt.Println(author)
+		fmt.Println("-", len(m[author]), "commits")
+		fmt.Println("-", commitLength, "Total commit chars")
+		fmt.Println("-", commitAverage, "Average commit chars")
+		fmt.Println()
 	}
 }
